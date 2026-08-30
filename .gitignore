@@ -1,0 +1,9 @@
+node_modules
+parity-report
+.parity-report
+*.png
+!examples/*.png
+.DS_Store
+.env
+dist
+coverage

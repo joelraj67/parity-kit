@@ -1,0 +1,58 @@
+{
+  "name": "parity-kit",
+  "version": "1.0.0",
+  "description": "The AI-native visual, layout, animation & SEO parity scanner for web migrations and regression testing.",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "types": "src/types.d.ts",
+  "type": "module",
+  "bin": {
+    "parity-kit": "./bin/cli.js",
+    "parity": "./bin/cli.js",
+    "web-parity-kit": "./bin/cli.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "start": "node bin/cli.js",
+    "test": "node bin/cli.js --help"
+  },
+  "keywords": [
+    "visual-regression",
+    "parity-testing",
+    "web-migration",
+    "pixel-perfect",
+    "playwright",
+    "seo-audit",
+    "diff-engine",
+    "ai-testing",
+    "nextjs-migration",
+    "astro-migration",
+    "remix-migration",
+    "parity-kit",
+    "migration-testing"
+  ],
+  "author": "Joel Raj Bathula <https://github.com/joelraj67>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joelraj67/parity-kit.git"
+  },
+  "homepage": "https://github.com/joelraj67/parity-kit#readme",
+  "bugs": {
+    "url": "https://github.com/joelraj67/parity-kit/issues"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.50.0",
+    "pixelmatch": "^6.0.0",
+    "pngjs": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

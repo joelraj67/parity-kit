@@ -1,0 +1,32 @@
+﻿{
+  "baselineBaseUrl": "https://example.com",
+  "currentBaseUrl": "http://localhost:3000",
+  "outputDir": "./parity-report",
+  "threshold": 0.1,
+  "failOnDiffThreshold": 2.0,
+  "viewports": [
+    { "name": "desktop", "width": 1280, "height": 800 },
+    { "name": "mobile", "width": 375, "height": 812 }
+  ],
+  "freezeAnimations": true,
+  "waitForFonts": true,
+  "triggerScrollAnimations": true,
+  "maskSelectors": [
+    ".live-clock",
+    ".dynamic-timestamp"
+  ],
+  "scenarios": [
+    {
+      "name": "Navigation Dropdown Hover",
+      "action": "hover",
+      "selector": ".nav-item.dropdown",
+      "waitFor": ".dropdown-menu.show",
+      "delay": 300
+    }
+  ],
+  "routes": [
+    { "name": "Homepage", "path": "/", "baselinePath": "/" },
+    { "name": "About Us", "path": "/about", "baselinePath": "/about-us" },
+    { "name": "Contact", "path": "/contact", "baselinePath": "/contact" }
+  ]
+}
