@@ -1,7 +1,7 @@
 {
   "name": "parity-kit",
   "version": "1.0.0",
-  "description": "The AI-native visual, layout, animation & SEO parity scanner for web migrations and regression testing.",
+  "description": "AI-native visual, layout, animation & SEO parity scanner for web migrations. Pixel-perfect regression testing with Playwright.",
   "main": "src/index.js",
   "module": "src/index.js",
   "types": "src/types.d.ts",
@@ -16,11 +16,18 @@
     "src",
     "examples",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md",
+    "SECURITY.md"
   ],
   "scripts": {
     "start": "node bin/cli.js",
-    "test": "node bin/cli.js --help"
+    "test": "node --test test/*.test.js",
+    "lint": "node --check bin/cli.js src/*.js",
+    "prepare": "",
+    "postinstall": "npx playwright install chromium"
   },
   "keywords": [
     "visual-regression",
@@ -35,7 +42,8 @@
     "astro-migration",
     "remix-migration",
     "parity-kit",
-    "migration-testing"
+    "migration-testing",
+    "visual-testing"
   ],
   "author": "Joel Raj Bathula <https://github.com/joelraj67>",
   "repository": {
@@ -54,5 +62,16 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/joelraj67"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }

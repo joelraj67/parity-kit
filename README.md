@@ -1,54 +1,118 @@
-﻿# 🔍 parity-kit
+# 🔍 parity-kit
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![npm version](https://img.shields.io/badge/npm-v1.0.0-orange.svg)](https://npmjs.com/package/parity-kit)
-[![Playwright](https://img.shields.io/badge/tested%20with-Playwright-green.svg)](https://playwright.dev/)
+<p align="center">
+  <strong>The AI-native visual, layout, animation & SEO parity scanner for web migrations.</strong><br/>
+  Pixel-perfect regression testing. Zero flakes. One command.
+</p>
 
-> **The AI-Native Visual, Layout, Animation & SEO Parity Scanner for Web Migrations and Regression Testing.**
+<p align="center">
+  <a href="https://www.npmjs.com/package/parity-kit"><img src="https://img.shields.io/npm/v/parity-kit?color=orange&label=npm" alt="npm version"/></a>
+  <a href="https://www.npmjs.com/package/parity-kit"><img src="https://img.shields.io/npm/dm/parity-kit?color=blue" alt="npm downloads"/></a>
+  <a href="https://github.com/joelraj67/parity-kit/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="license"/></a>
+  <a href="https://github.com/joelraj67/parity-kit/actions/workflows/ci.yml"><img src="https://github.com/joelraj67/parity-kit/actions/workflows/ci.yml/badge.svg" alt="CI"/></a>
+  <a href="https://github.com/joelraj67/parity-kit/actions/workflows/codeql.yml"><img src="https://github.com/joelraj67/parity-kit/actions/workflows/codeql.yml/badge.svg" alt="CodeQL"/></a>
+  <img src="https://img.shields.io/badge/tested%20with-Playwright-45ba62.svg" alt="Playwright"/>
+  <img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg" alt="node"/>
+</p>
 
-As AI accelerates full-stack web migrations (ASP.NET MVC, Razor, PHP, WordPress, Rails, Ruby -> Next.js, Remix, Astro, Nuxt), the #1 risk is **visual, structural, and SEO regression**.
+<p align="center">
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-why-parity-kit">Why</a> •
+  <a href="#-comparison">vs Percy / Chromatic</a> •
+  <a href="#%EF%B8%8F-configuration">Config</a> •
+  <a href="#-programmatic-api">API</a> •
+  <a href="#-cicd">CI</a>
+</p>
 
-`parity-kit` provides a deterministic automated audit engine that compares your live production baseline against your new modern build across responsive viewports, generating an interactive visual comparison dashboard.
+> Migrating ASP.NET MVC / Razor / PHP / WordPress / Rails -> Next.js / Remix / Astro / Nuxt? **parity-kit** diffs your live baseline against your new build across viewports and ships an interactive dashboard — so AI-accelerated migrations don't ship visual or SEO regressions.
 
 ---
 
-## 🌟 Key Capabilities
+## ✨ What it does
 
-- 🎯 **Pixel-Perfect Visual Regression**: Fast, SIMD-filtered pixel diffing using Pixelmatch with configurable color-distance thresholds.
-- 📐 **Deep Computed CSS Diagnostics**: Pinpoints exact CSS deltas across semantic tags (`h1`, `h2`, `p`, `button`, `nav`, `container`) showing font size, line height, padding, and margin shifts.
-- 🎬 **Micro-Interactions & Animation Auditing**: Audits CSS transition durations, timing functions, and keyframe animations with interactive scenario hooks (`hover`, `click`, `scroll`).
-- 🔍 **Semantic SEO & Schema Validation**: Verifies Title, Description, OpenGraph, Twitter Cards, canonical tags, and JSON-LD structured schemas.
-- 🛡️ **Zero-Flake Preprocessors**: Automatically freezes CSS animations, hides blinking text cursors, hides cross-OS scrollbars, and awaits web font & image decode readiness.
-- 🕷️ **Automated Route Discovery**: Zero-config sitemap parser (`--sitemap`) and recursive internal link crawler (`--crawl`).
-- 📊 **Standalone Interactive Dashboard**: Generates a self-contained HTML report with **Side-by-Side View**, **Interactive Swipe Scrubber**, **Onion-Skin Transparency**, **CSS Inspector**, and **Console & Network Health**.
+| Capability | Detail |
+|---|---|
+| Pixel-perfect diff | pixelmatch + pngjs with tunable threshold (filters subpixel AA) |
+| CSS inspector | Deltas on h1/h2/p/button/nav/container — font-size, line-height, padding, margin |
+| Animation audit | CSS transitions / keyframes + hover/click/scroll scenario hooks |
+| SEO parity | title, meta, OG, Twitter, canonical, JSON-LD |
+| Zero-flake | Freeze animations, hide caret, hide scrollbars, waitForFonts, img.decode() |
+| Auto-discovery | --sitemap or --crawl — no manual route list |
+| Dashboard | Standalone HTML: side-by-side, swipe scrubber, onion-skin, CSS inspector, console/network health |
+
+**Dashboard preview:** run a scan -> open `parity-report/index.html` (self-contained, no server needed).
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick start
 
-### 1. Zero-Config CLI (One-Liner)
-Compare any live website against any local or staging build immediately:
 ```bash
+# 1. Zero-config — compare prod vs local
 npx parity-kit https://production.example.com http://localhost:3000
-```
 
-### 2. Auto-Crawl from Sitemap
-```bash
+# 2. Auto-discover from sitemap
 npx parity-kit --sitemap https://production.example.com/sitemap.xml --current http://localhost:3000
-```
 
-### 3. Using a Configuration File
-```bash
+# 3. Crawl internal links
+npx parity-kit --crawl --sitemap https://example.com/sitemap.xml --current http://localhost:3000
+
+# 4. Config file (recommended for CI)
+npx parity-kit init --baseline https://example.com --current http://localhost:3000
 npx parity-kit --config parity.config.json
 ```
 
+Short alias: `npx parity --help` · legacy `npx web-parity-kit` still works.
+
 ---
 
-## ⚙️ Configuration Reference (`parity.config.json`)
+## 📦 Installation
+
+```bash
+npm i -D parity-kit        # project-local
+# or
+npm i -g parity-kit        # global CLI
+npx playwright install chromium  # first run only
+```
+
+**Requirements:** Node.js >= 18.
+
+---
+
+## 🧠 Why parity-kit
+
+AI can port a 200-page site in a day. The bottleneck isn't code — it's **trust**: did the hero still align, did the SEO schema survive, did the dropdown animation regress on mobile?
+
+| Without parity-kit | With parity-kit |
+|---|---|
+| Manual click-through, eyeballing | Deterministic pixel + CSS + SEO diff |
+| "Looks fine on my machine" (mac vs win scrollbar) | Scrollbars hidden, fonts awaited, animations frozen |
+| SEO break discovered post-indexing | CI fails PR if failOnDiffThreshold exceeded |
+
+Built for **migration parity**, not just Storybook — compare full served pages.
+
+---
+
+## 🔄 Comparison
+
+| Tool | Scope | Self-hosted | SEO check | Cost |
+|---|---|---|---|---|
+| **parity-kit** | Full-page parity (visual + CSS + SEO) | Yes, local | Yes | Free (MIT) |
+| Percy (BrowserStack) | Visual snapshots | No (cloud) | No | Paid |
+| Chromatic | Storybook | No (cloud) | No | Paid |
+| BackstopJS | Visual regression | Yes | No | Free |
+| Lost Pixel | Pages + Storybook | Self-host | No | Free/paid |
+
+Use Percy/Chromatic for component libraries; use **parity-kit** for site migration confidence (routes, redirects, SEO, layout).
+
+---
+
+## ⚙️ Configuration
+
+`parity.config.json` (from `npx parity-kit init`):
 
 ```json
 {
-  "baselineBaseUrl": "https://github.com/joelraj67/parity-kit",
+  "baselineBaseUrl": "https://example.com",
   "currentBaseUrl": "http://localhost:3000",
   "outputDir": "./parity-report",
   "threshold": 0.1,
@@ -60,32 +124,30 @@ npx parity-kit --config parity.config.json
   "freezeAnimations": true,
   "waitForFonts": true,
   "triggerScrollAnimations": true,
-  "maskSelectors": [
-    ".live-clock",
-    ".dynamic-timestamp"
-  ],
+  "maskSelectors": [".live-clock", ".dynamic-timestamp"],
   "scenarios": [
-    {
-      "name": "Navigation Dropdown Hover",
-      "action": "hover",
-      "selector": ".nav-item.dropdown",
-      "waitFor": ".dropdown-menu.show",
-      "delay": 300
-    }
+    { "name": "Dropdown hover", "action": "hover", "selector": ".nav-item.dropdown", "waitFor": ".dropdown-menu.show", "delay": 300 }
   ],
   "routes": [
     { "name": "Homepage", "path": "/", "baselinePath": "/" },
-    { "name": "About Us", "path": "/about", "baselinePath": "/AboutUs" },
-    { "name": "AI Services", "path": "/services/ai", "baselinePath": "/AIServicesPage" }
+    { "name": "About", "path": "/about", "baselinePath": "/about-us" }
   ]
 }
 ```
 
+| Key | Default | Note |
+|---|---|---|
+| threshold | 0.1 | Pixelmatch color distance (0 strict) |
+| failOnDiffThreshold | 1.0 | % mismatch to fail CI |
+| sitemapUrl / crawl | — | Auto-discover routes |
+| maskSelectors | — | Hide dynamic regions |
+| scenarios | — | Hover/click/scroll before capture |
+
 ---
 
-## 💻 Programmatic Node.js / TypeScript API
+## 💻 Programmatic API
 
-```typescript
+```ts
 import { runParityScan } from "parity-kit";
 
 const results = await runParityScan({
@@ -93,31 +155,30 @@ const results = await runParityScan({
   currentBaseUrl: "http://localhost:3000",
   threshold: 0.1,
   viewports: [{ name: "desktop", width: 1280, height: 800 }],
-  routes: [
-    { name: "Homepage", path: "/" }
-  ]
+  routes: [{ name: "Homepage", path: "/" }]
 });
 
 console.log(`Passed: ${results.filter(r => r.passed).length} / ${results.length}`);
 ```
 
+Types: `import type { ParityConfig, ParityResult } from "parity-kit"` — see `src/types.d.ts`.
+
 ---
 
-## 🤖 CI/CD Integration
+## 🤖 CI/CD
 
-### GitHub Actions Workflow (`.github/workflows/parity.yml`)
+### GitHub Actions (PR comment with diff table)
+
 ```yaml
 name: Visual & SEO Parity Check
 on: [pull_request]
-
 jobs:
   parity-audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with:
-          node-version: 20
+        with: { node-version: 20 }
       - run: npm ci
       - run: npm run build && npm start &
       - run: npx parity-kit --config parity.config.json --output-md pr-summary.md
@@ -127,29 +188,49 @@ jobs:
           script: |
             const fs = require('fs');
             if (fs.existsSync('pr-summary.md')) {
-              const body = fs.readFileSync('pr-summary.md', 'utf8');
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: body
-              });
+              const body = fs.readFileSync('pr-summary.md','utf8');
+              github.rest.issues.createComment({ issue_number: context.issue.number, owner: context.repo.owner, repo: context.repo.repo, body });
             }
 ```
 
+Upload `parity-report/` as artifact for the HTML dashboard. See `.github/workflows/ci.yml`.
+
+### Local CI fail gate
+`failOnDiffThreshold: 2.0` -> process exits 1 if any route exceeds 2% mismatch.
+
 ---
 
-## 🛡️ Edge Cases Handled
+## 🛡️ Edge cases handled
 
-1. **AOS & Scroll-Triggered Animations**: Virtually scrolls the page to trigger all viewport intersection observers, then injects zero-motion CSS before capture.
-2. **Font Swap & WebFont Jitter (FOIT/FOUT)**: Awaits `document.fonts.ready` on both baseline and target environments.
-3. **Blinking Input Cursors**: Injects `caret-color: transparent !important;` and blurs active elements to prevent random 1px caret diffs.
-4. **Cross-OS Scrollbar Differences**: Disables and hides scrollbars across Windows, macOS, and Linux to ensure uniform viewport widths.
-5. **Smart Embed & Tracker Masks**: Auto-masks Google Maps iframes, YouTube embeds, cookie consent banners, and chat bubbles (HubSpot, Intercom, Crisp, Drift).
-6. **Progressive Image Decoding**: Awaits `img.decode()` on all images so heavy WebP/AVIF graphics never render as blank grey boxes.
-7. **Broken Assets & Console Errors**: Listens for JavaScript runtime exceptions and 404/500 asset failures.
+1. **AOS / scroll animations** — virtually scrolls to trigger IntersectionObserver, then zeroes motion.
+2. **FOIT/FOUT** — awaits `document.fonts.ready`.
+3. **Caret blink** — `caret-color: transparent` + blur.
+4. **Scrollbar width** — hides scrollbars cross-OS.
+5. **Embeds/trackers** — auto-masks Maps, YouTube, cookie banners, HubSpot/Intercom/Crisp/Drift.
+6. **Progressive images** — awaits `img.decode()`.
+7. **Console/network** — captures 4xx/5xx + JS exceptions into report.
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Baseline auto-update (`--update-baseline`)
+- [ ] Trace viewer integration
+- [ ] Storybook component mode
+- [ ] SARIF output for GitHub code scanning
+
+PRs welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
+## 🤝 Contributing & community
+
+- [Contributing guide](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md)
+- Discussions: [GitHub Discussions](https://github.com/joelraj67/parity-kit/discussions)
+- Issues: [Bug / Feature templates](https://github.com/joelraj67/parity-kit/issues/new/choose)
 
 ---
 
 ## 📄 License
-MIT © [Joel Raj Bathula](https://hansaitechnosoft.com)
+
+MIT © [Joel Raj Bathula](https://github.com/joelraj67)

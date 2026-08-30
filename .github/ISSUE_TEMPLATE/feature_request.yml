@@ -1,0 +1,19 @@
+name: ✨ Feature request
+description: Suggest an idea
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      placeholder: I want to compare...
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal (keep it minimal — what's the smallest diff that solves it?)
+  - type: checkboxes
+    id: yagni
+    attributes:
+      label: YAGNI check
+      options:
+        - label: I checked if this already exists in src/ or an installed dep
