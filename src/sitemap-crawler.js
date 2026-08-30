@@ -8,7 +8,7 @@
 export async function fetchSitemapUrls(sitemapUrl, maxPages = 100) {
   try {
     const res = await fetch(sitemapUrl, {
-      headers: { "User-Agent": "WebParityKit/1.0 Crawler" }
+      headers: { "User-Agent": "WebParityKit/1.0 Crawler" },
     });
     if (!res.ok) {
       throw new Error(`Failed to fetch sitemap: ${res.status} ${res.statusText}`);
@@ -31,7 +31,7 @@ export async function fetchSitemapUrls(sitemapUrl, maxPages = 100) {
  */
 export async function crawlSiteRoutes(browser, baseUrl, maxPages = 30) {
   const context = await browser.newContext({
-    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) WebParityKit/1.0"
+    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) WebParityKit/1.0",
   });
   const page = await context.newPage();
   const visited = new Set();
@@ -79,7 +79,13 @@ export async function crawlSiteRoutes(browser, baseUrl, maxPages = 30) {
   }
 
   return Array.from(visited).map((p) => ({
-    name: p === "/" ? "Homepage" : p.replace(/^\//, "").replace(/\/$/, "").replace(/[^a-zA-Z0-9]/g, " "),
-    path: p
+    name:
+      p === "/"
+        ? "Homepage"
+        : p
+            .replace(/^\//, "")
+            .replace(/\/$/, "")
+            .replace(/[^a-zA-Z0-9]/g, " "),
+    path: p,
   }));
 }

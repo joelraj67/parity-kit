@@ -3,8 +3,12 @@
  */
 export async function extractPerformanceMetrics(page) {
   return await page.evaluate(() => {
-    const timing = performance.getEntriesByType("navigation")[0];
-    const resources = performance.getEntriesByType("resource");
+    const timing = /** @type {PerformanceNavigationTiming} */ (
+      performance.getEntriesByType("navigation")[0]
+    );
+    const resources = /** @type {PerformanceResourceTiming[]} */ (
+      performance.getEntriesByType("resource")
+    );
 
     return {
       domContentLoaded: timing ? Math.round(timing.domContentLoadedEventEnd - timing.startTime) : 0,
@@ -13,8 +17,8 @@ export async function extractPerformanceMetrics(page) {
       totalDomElements: document.getElementsByTagName("*").length,
       resourceCount: resources.length,
       totalTransferSizeKb: Math.round(
-        resources.reduce((acc, r) => acc + (r.transferSize || 0), 0) / 1024
-      )
+        resources.reduce((acc, r) => acc + (r.transferSize || 0), 0) / 1024,
+      ),
     };
   });
 }

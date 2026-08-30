@@ -62,7 +62,7 @@ export async function waitForImagesLoaded(page) {
             img.onerror = res;
             setTimeout(res, 2000); // Timeout guard per image
           });
-        })
+        }),
       );
     });
   } catch (e) {
@@ -76,9 +76,10 @@ export async function waitForImagesLoaded(page) {
 export async function stabilizeUiStyles(page) {
   try {
     await page.evaluate(() => {
-      if (document.activeElement && typeof document.activeElement.blur === "function") {
-        document.activeElement.blur();
-      }
+    const activeElement = /** @type {HTMLElement | null} */ (document.activeElement);
+    if (activeElement && typeof activeElement.blur === "function") {
+      activeElement.blur();
+    }
     });
   } catch (e) {}
 
@@ -105,7 +106,7 @@ export async function stabilizeUiStyles(page) {
         width: 0px !important;
         height: 0px !important;
       }
-    `
+    `,
   });
 }
 
@@ -117,15 +118,15 @@ export async function applySmartMasks(page, customMasks = []) {
     'iframe[src*="google.com/maps"]',
     'iframe[src*="youtube"]',
     'iframe[src*="vimeo"]',
-    '#hubspot-messages-iframe-container',
-    '#intercom-container',
+    "#hubspot-messages-iframe-container",
+    "#intercom-container",
     '[class*="crisp-client"]',
-    '#drift-widget',
-    '#launcher',
+    "#drift-widget",
+    "#launcher",
     '[id*="cookie-banner"]',
     '[id*="cookie-law"]',
     '[class*="cookie-consent"]',
-    '#onetrust-consent-sdk'
+    "#onetrust-consent-sdk",
   ];
 
   const allSelectors = [...new Set([...defaultSmartSelectors, ...(customMasks || [])])];
@@ -137,6 +138,6 @@ export async function applySmartMasks(page, customMasks = []) {
         visibility: hidden !important;
         opacity: 0 !important;
       }
-    `
+    `,
   });
 }

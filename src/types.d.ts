@@ -25,7 +25,9 @@ export interface ParityConfig {
   outputDir?: string;
   threshold?: number;
   failOnDiffThreshold?: number;
+  ssimThreshold?: number;
   viewports?: Viewport[];
+  browsers?: ("chromium" | "firefox" | "webkit")[];
   freezeAnimations?: boolean;
   waitForFonts?: boolean;
   triggerScrollAnimations?: boolean;
@@ -37,6 +39,7 @@ export interface ParityConfig {
   maxPages?: number;
   outputMd?: string;
   colorScheme?: "light" | "dark";
+  silent?: boolean;
   timeout?: number;
 }
 
@@ -46,6 +49,7 @@ export interface VisualDiffResult {
   totalPixels: number;
   diffPixels: number;
   diffPercentage: number;
+  ssim?: number;
   diffBuffer?: Buffer;
 }
 
@@ -66,6 +70,7 @@ export interface SeoIssue {
 export interface ParityTestResult {
   route: RouteConfig;
   viewport: Viewport;
+  browser?: string;
   passed: boolean;
   visual: VisualDiffResult | null;
   seo: { match: boolean; issues: SeoIssue[] } | null;

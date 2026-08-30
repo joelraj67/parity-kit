@@ -39,6 +39,8 @@ Commands:
 Options:
   -c, --config <path>      Path to JSON configuration file
   -s, --sitemap <url>      Auto-discover routes from sitemap.xml
+  -B, --browsers <list>    Comma-separated browsers to scan (chromium,firefox,webkit). Default: chromium
+  -V, --viewports <list>    Comma-separated WxH resolutions (e.g. 1280x800,375x812)
   --crawl                  Auto-crawl internal links starting from baseline URL
   -o, --output-dir <path>  Output directory for HTML dashboard (default: ./parity-report)
   --output-md <path>       Output Markdown summary table for PR comments
@@ -55,6 +57,13 @@ Options:
     options.configPath = args[++i];
   } else if (arg === "--sitemap" || arg === "-s") {
     options.sitemapUrl = args[++i];
+  } else if (arg === "--browsers" || arg === "-B") {
+    options.browsers = args[++i].split(",").map((b) => b.trim());
+  } else if (arg === "--viewports" || arg === "-V") {
+    options.viewports = args[++i].split(",").map((v) => {
+      const [w, h] = v.trim().split("x").map(Number);
+      return { name: v.trim(), width: w, height: h };
+    });
   } else if (arg === "--crawl") {
     options.crawl = true;
   } else if (arg === "--output-md") {

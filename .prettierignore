@@ -1,0 +1,8 @@
+node_modules
+coverage
+parity-report
+templates
+examples
+package-lock.json
+*.min.js
+CHANGELOG.md

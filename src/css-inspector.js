@@ -16,7 +16,7 @@ export async function extractComputedStyles(page) {
       { selector: "nav", label: "Navigation Bar" },
       { selector: "button, .btn, .thm-btn", label: "Primary Button" },
       { selector: "footer", label: "Footer Container" },
-      { selector: ".container, main", label: "Main Container" }
+      { selector: ".container, main", label: "Main Container" },
     ];
 
     const results = {};
@@ -36,7 +36,7 @@ export async function extractComputedStyles(page) {
           marginBottom: style.marginBottom,
           display: style.display,
           width: style.width,
-          maxWidth: style.maxWidth
+          maxWidth: style.maxWidth,
         };
       }
     }
@@ -62,19 +62,25 @@ export function compareComputedStyles(baselineStyles = {}, currentStyles = {}) {
       { key: "marginBottom", name: "Margin Bottom" },
       { key: "padding", name: "Padding" },
       { key: "color", name: "Text Color" },
-      { key: "backgroundColor", name: "Background Color" }
+      { key: "backgroundColor", name: "Background Color" },
     ];
 
     for (const prop of propertiesToCompare) {
       const bVal = baseStyle[prop.key];
       const cVal = currStyle[prop.key];
 
-      if (bVal && cVal && bVal !== cVal && bVal !== "rgba(0, 0, 0, 0)" && cVal !== "rgba(0, 0, 0, 0)") {
+      if (
+        bVal &&
+        cVal &&
+        bVal !== cVal &&
+        bVal !== "rgba(0, 0, 0, 0)" &&
+        cVal !== "rgba(0, 0, 0, 0)"
+      ) {
         deltas.push({
           element: elementLabel,
           property: prop.name,
           baseline: bVal,
-          current: cVal
+          current: cVal,
         });
       }
     }

@@ -14,13 +14,15 @@ export function detectLocalRoutes(projectRoot = process.cwd()) {
   const visitedPaths = new Set();
 
   const addRoute = (routePath, name) => {
-    const normalized = routePath === "" ? "/" : routePath.startsWith("/") ? routePath : `/${routePath}`;
-    const cleanPath = normalized === "/" ? "/" : normalized.endsWith("/") ? normalized : `${normalized}/`;
+    const normalized =
+      routePath === "" ? "/" : routePath.startsWith("/") ? routePath : `/${routePath}`;
+    const cleanPath =
+      normalized === "/" ? "/" : normalized.endsWith("/") ? normalized : `${normalized}/`;
     if (!visitedPaths.has(cleanPath)) {
       visitedPaths.add(cleanPath);
       routes.push({
         name: name || formatRouteName(cleanPath),
-        path: cleanPath
+        path: cleanPath,
       });
     }
   };
@@ -29,7 +31,7 @@ export function detectLocalRoutes(projectRoot = process.cwd()) {
   const appDirs = [
     path.join(projectRoot, "src/app"),
     path.join(projectRoot, "app"),
-    path.join(projectRoot, "hansai-spa/src/app")
+    path.join(projectRoot, "hansai-spa/src/app"),
   ];
   for (const d of appDirs) {
     if (fs.existsSync(d)) {
@@ -38,15 +40,14 @@ export function detectLocalRoutes(projectRoot = process.cwd()) {
   }
 
   // 2. Next.js / Nuxt / Gatsby Pages Router (src/pages, pages)
-  const pagesDirs = [
-    path.join(projectRoot, "src/pages"),
-    path.join(projectRoot, "pages")
-  ];
+  const pagesDirs = [path.join(projectRoot, "src/pages"), path.join(projectRoot, "pages")];
   for (const d of pagesDirs) {
     if (fs.existsSync(d)) {
       scanFolder(d, "", /\.(tsx|jsx|js|ts|vue|astro|md|mdx)$/, (p) => {
         if (!p.startsWith("_") && !p.startsWith("api/")) {
-          const clean = p.replace(/\.(tsx|jsx|js|ts|vue|astro|md|mdx)$/, "").replace(/\/index$/, "");
+          const clean = p
+            .replace(/\.(tsx|jsx|js|ts|vue|astro|md|mdx)$/, "")
+            .replace(/\/index$/, "");
           addRoute(clean === "" ? "/" : clean);
         }
       });
@@ -57,7 +58,10 @@ export function detectLocalRoutes(projectRoot = process.cwd()) {
   const remixDir = path.join(projectRoot, "app/routes");
   if (fs.existsSync(remixDir)) {
     scanFolder(remixDir, "", /\.(tsx|jsx|js|ts)$/, (p) => {
-      const clean = p.replace(/\.(tsx|jsx|js|ts)$/, "").replace(/\._index$/, "").replace(/\./g, "/");
+      const clean = p
+        .replace(/\.(tsx|jsx|js|ts)$/, "")
+        .replace(/\._index$/, "")
+        .replace(/\./g, "/");
       addRoute(clean === "" ? "/" : clean);
     });
   }
@@ -74,7 +78,7 @@ export function detectLocalRoutes(projectRoot = process.cwd()) {
     path.join(projectRoot, "out"),
     path.join(projectRoot, "dist"),
     path.join(projectRoot, "public"),
-    path.join(projectRoot, "wwwroot")
+    path.join(projectRoot, "wwwroot"),
   ];
   for (const d of staticDirs) {
     if (fs.existsSync(d)) {
@@ -104,7 +108,12 @@ function scanFolder(dir, currentPath, filePattern, onMatch) {
         // Skip hidden folders and node_modules
         if (entry.name.startsWith(".") || entry.name === "node_modules") continue;
         const segment = entry.name.startsWith("(") && entry.name.endsWith(")") ? "" : entry.name;
-        scanFolder(path.join(dir, entry.name), segment ? `${currentPath}/${segment}` : currentPath, filePattern, onMatch);
+        scanFolder(
+          path.join(dir, entry.name),
+          segment ? `${currentPath}/${segment}` : currentPath,
+          filePattern,
+          onMatch,
+        );
       } else if (entry.isFile() && filePattern.test(entry.name)) {
         onMatch(currentPath);
       }
@@ -122,7 +131,7 @@ export function detectLegacyRouteMappings(projectRoot = process.cwd()) {
   // 1. staticwebapp.config.json
   const swaFiles = [
     path.join(projectRoot, "staticwebapp.config.json"),
-    path.join(projectRoot, "hansai-spa/staticwebapp.config.json")
+    path.join(projectRoot, "hansai-spa/staticwebapp.config.json"),
   ];
   for (const f of swaFiles) {
     if (fs.existsSync(f)) {
@@ -159,13 +168,15 @@ export function detectLegacyRouteMappings(projectRoot = process.cwd()) {
     path.join(projectRoot, "next.config.ts"),
     path.join(projectRoot, "next.config.js"),
     path.join(projectRoot, "hansai-spa/next.config.ts"),
-    path.join(projectRoot, "hansai-spa/next.config.js")
+    path.join(projectRoot, "hansai-spa/next.config.js"),
   ];
   for (const ncp of nextConfigPaths) {
     if (fs.existsSync(ncp)) {
       try {
         const content = fs.readFileSync(ncp, "utf-8");
-        const redirectMatches = [...content.matchAll(/source:\s*["']([^"']+)["'],\s*destination:\s*["']([^"']+)["']/g)];
+        const redirectMatches = [
+          ...content.matchAll(/source:\s*["']([^"']+)["'],\s*destination:\s*["']([^"']+)["']/g),
+        ];
         for (const m of redirectMatches) {
           mappings[m[2].replace(/\/$/, "")] = m[1];
         }
@@ -193,7 +204,7 @@ export function detectLegacyRouteMappings(projectRoot = process.cwd()) {
 /**
  * Format a URL path into a human-readable title
  */
-function formatRouteName(pathname) {
+export function formatRouteName(pathname) {
   if (!pathname || pathname === "/") return "Homepage";
   const clean = pathname.replace(/^\//, "").replace(/\/$/, "");
   return clean
@@ -226,7 +237,7 @@ export function generateParityConfig(options = {}) {
     return {
       name: r.name,
       path: r.path,
-      baselinePath: legacyPath
+      baselinePath: legacyPath,
     };
   });
 
@@ -236,33 +247,31 @@ export function generateParityConfig(options = {}) {
     outputDir: "./parity-report",
     threshold: 0.1,
     failOnDiffThreshold: 5.0,
+    ssimThreshold: 0.98,
     viewports: [
       { name: "desktop", width: 1280, height: 800 },
-      { name: "mobile", width: 375, height: 812 }
+      { name: "mobile", width: 375, height: 812 },
     ],
     freezeAnimations: true,
     waitForFonts: true,
     triggerScrollAnimations: true,
-    maskSelectors: [
-      ".live-clock",
-      ".dynamic-timestamp"
-    ],
+    maskSelectors: [".live-clock", ".dynamic-timestamp"],
     scenarios: [
       {
         name: "Navigation Dropdown Hover",
         action: "hover",
         selector: ".nav-item.dropdown:nth-child(3)",
         waitFor: ".dropdown-menu.show",
-        delay: 350
+        delay: 350,
       },
       {
         name: "Primary CTA Button Hover",
         action: "hover",
         selector: ".thm-btn, .btn-primary",
-        delay: 250
-      }
+        delay: 250,
+      },
     ],
-    routes: routes.length > 0 ? routes : [{ name: "Homepage", path: "/", baselinePath: "/" }]
+    routes: routes.length > 0 ? routes : [{ name: "Homepage", path: "/", baselinePath: "/" }],
   };
 
   fs.writeFileSync(outputPath, JSON.stringify(config, null, 2), "utf-8");

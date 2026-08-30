@@ -7,3 +7,6 @@ parity-report
 .env
 dist
 coverage
+
+# Kilo goal state
+.kilo/goal-state.md

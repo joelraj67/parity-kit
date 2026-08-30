@@ -5,10 +5,12 @@ export async function extractSeoMetadata(page) {
   return await page.evaluate(() => {
     const getMeta = (query) => {
       const el = document.querySelector(query);
-      return el ? (el.getAttribute("content") || el.getAttribute("href") || "") : null;
+      return el ? el.getAttribute("content") || el.getAttribute("href") || "" : null;
     };
 
-    const jsonLdScripts = Array.from(document.querySelectorAll('script[type="application/ld+json"]'));
+    const jsonLdScripts = Array.from(
+      document.querySelectorAll('script[type="application/ld+json"]'),
+    );
     const jsonLdSchemas = jsonLdScripts.map((s) => {
       try {
         return JSON.parse(s.textContent || "{}");
@@ -26,16 +28,16 @@ export async function extractSeoMetadata(page) {
         title: getMeta('meta[property="og:title"]'),
         description: getMeta('meta[property="og:description"]'),
         image: getMeta('meta[property="og:image"]'),
-        url: getMeta('meta[property="og:url"]')
+        url: getMeta('meta[property="og:url"]'),
       },
       twitter: {
         card: getMeta('meta[name="twitter:card"]'),
         title: getMeta('meta[name="twitter:title"]'),
         description: getMeta('meta[name="twitter:description"]'),
-        image: getMeta('meta[name="twitter:image"]')
+        image: getMeta('meta[name="twitter:image"]'),
       },
       jsonLdCount: jsonLdSchemas.length,
-      jsonLdSchemas
+      jsonLdSchemas,
     };
   });
 }
@@ -52,7 +54,7 @@ export function compareSeoMetadata(baseline, current) {
         field: "Title",
         baseline: baseline.title,
         current: current.title,
-        status: "mismatch"
+        status: "mismatch",
       });
     }
   }
@@ -63,7 +65,7 @@ export function compareSeoMetadata(baseline, current) {
         field: "Description",
         baseline: baseline.description,
         current: current.description,
-        status: "mismatch"
+        status: "mismatch",
       });
     }
   }
@@ -73,7 +75,7 @@ export function compareSeoMetadata(baseline, current) {
       field: "JSON-LD Count",
       baseline: `${baseline.jsonLdCount} schemas`,
       current: `${current.jsonLdCount} schemas`,
-      status: "info"
+      status: "info",
     });
   }
 
@@ -81,6 +83,6 @@ export function compareSeoMetadata(baseline, current) {
     baseline,
     current,
     match: issues.length === 0,
-    issues
+    issues,
   };
 }

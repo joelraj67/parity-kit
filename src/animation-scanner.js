@@ -12,7 +12,7 @@ export async function extractAnimationProperties(page) {
       { selector: ".dropdown-menu, .nav-item", label: "Dropdown Transitions" },
       { selector: ".card, .service-card, .vcto-card", label: "Card Hover Elevations" },
       { selector: ".accordion-collapse, .collapse", label: "Accordion Collapse Animation" },
-      { selector: "[data-aos], .animate__animated", label: "Scroll-Triggered Keyframes" }
+      { selector: "[data-aos], .animate__animated", label: "Scroll-Triggered Keyframes" },
     ];
 
     const results = {};
@@ -28,7 +28,7 @@ export async function extractAnimationProperties(page) {
           transitionDelay: style.transitionDelay,
           animationName: style.animationName,
           animationDuration: style.animationDuration,
-          animationTimingFunction: style.animationTimingFunction
+          animationTimingFunction: style.animationTimingFunction,
         };
       }
     }
@@ -69,13 +69,13 @@ export async function captureInteractiveState(page, scenario) {
     return {
       scenarioName: scenario.name,
       screenshot,
-      error: null
+      error: null,
     };
   } catch (err) {
     return {
       scenarioName: scenario.name,
       screenshot: null,
-      error: err.message
+      error: err.message,
     };
   }
 }

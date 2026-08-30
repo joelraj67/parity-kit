@@ -10,22 +10,19 @@ export const DEFAULT_CONFIG = {
   outputDir: "./parity-report",
   threshold: 0.1, // Pixelmatch threshold (0.0 strictly identical, 0.1 filters subpixel anti-aliasing)
   failOnDiffThreshold: 1.0, // Fail CI if mismatch exceeds 1.0%
+  ssimThreshold: 0.98, // Perceptual gate: when SSIM >= 0.98 the page is treated as visually identical, suppressing anti-aliasing / font-render false positives (research: ~95-97% SSIM = near-identical).
   viewports: [
     { name: "desktop", width: 1280, height: 800 },
     { name: "mobile", width: 375, height: 812 }
   ],
-  maskSelectors: [
-    ".live-clock",
-    ".date-badge-dynamic"
-  ],
-  routes: [
-    { name: "Homepage", path: "/" }
-  ],
+  browsers: ["chromium"], // Cross-browser parity: add "firefox" / "webkit" (install via `npx playwright install`)
+  maskSelectors: [".live-clock", ".date-badge-dynamic"],
+  routes: [{ name: "Homepage", path: "/" }],
   concurrency: 2,
   freezeAnimations: true,
   waitForFonts: true,
   triggerScrollAnimations: true,
-  timeout: 30000
+  timeout: 30000,
 };
 
 /**
@@ -46,6 +43,6 @@ export function loadConfig(configPath) {
     ...DEFAULT_CONFIG,
     ...userConfig,
     viewports: userConfig.viewports || DEFAULT_CONFIG.viewports,
-    routes: userConfig.routes || DEFAULT_CONFIG.routes
+    routes: userConfig.routes || DEFAULT_CONFIG.routes,
   };
 }

@@ -11,7 +11,9 @@ export function generateHtmlReport(results, config, outputDir) {
   const avgDiff =
     results.reduce((acc, r) => acc + (r.visual?.diffPercentage || 0), 0) /
     (totalTests || 1);
-
+  const avgSsim =
+    results.reduce((acc, r) => acc + (r.visual?.ssim != null ? r.visual.ssim : 0), 0) /
+    (totalTests || 1);
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -126,10 +128,14 @@ export function generateHtmlReport(results, config, outputDir) {
         <div class="metric-title">Mismatches Detected</div>
         <div class="metric-value ${failedTests > 0 ? "fail" : "pass"}">${failedTests}</div>
       </div>
-      <div class="metric-card">
-        <div class="metric-title">Average Pixel Diff</div>
-        <div class="metric-value info">${avgDiff.toFixed(3)}%</div>
-      </div>
+        <div class="metric-card">
+          <div class="metric-title">Average Pixel Diff</div>
+          <div class="metric-value info">${avgDiff.toFixed(3)}%</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Average SSIM</div>
+          <div class="metric-value info">${(avgSsim * 100).toFixed(2)}%</div>
+        </div>
     </div>
 
     <div class="controls">
@@ -152,9 +158,10 @@ export function generateHtmlReport(results, config, outputDir) {
               <span class="badge ${r.passed ? "pass" : "fail"}">${r.passed ? "PASS" : "DIFF DETECTED"}</span>
               <span>${r.route.name} <code style="color: var(--primary); font-size: 0.9rem;">${r.route.path}</code></span>
               <span style="font-size: 0.85rem; color: var(--text-muted);">[${r.viewport.name} - ${r.viewport.width}x${r.viewport.height}]</span>
+              <span style="font-size: 0.85rem; color: var(--text-muted);">· ${r.browser ?? "chromium"}</span>
             </div>
             <div style="font-size: 0.95rem; font-weight: 700;">
-              Diff: <span style="color: ${r.passed ? "var(--success)" : "var(--danger)"}">${r.visual?.diffPercentage || 0}%</span> (${r.visual?.diffPixels?.toLocaleString() || 0} px)
+              Diff: <span style="color: ${r.passed ? "var(--success)" : "var(--danger)"}">${r.visual?.diffPercentage || 0}%</span> (${r.visual?.diffPixels?.toLocaleString() || 0} px) · SSIM ${(r.visual?.ssim != null ? (r.visual.ssim * 100).toFixed(2) : "—")}%
             </div>
           </div>
 
@@ -226,7 +233,7 @@ export function generateHtmlReport(results, config, outputDir) {
                     ${r.cssDeltas
                       .map(
                         (d) =>
-                          `<tr><td><strong>${d.element}</strong></td><td>${d.property}</td><td><span class="delta-tag">${d.baseline}</span></td><td><span style="color: var(--success); font-weight: 700;">${d.current}</span></td></tr>`
+                          `<tr><td><strong>${d.element}</strong></td><td>${d.property}</td><td><span class="delta-tag">${d.baseline}</span></td><td><span style="color: var(--success); font-weight: 700;">${d.current}</span></td></tr>`,
                       )
                       .join("")}
                   </tbody>
@@ -248,7 +255,7 @@ export function generateHtmlReport(results, config, outputDir) {
                       ? Object.entries(r.animations)
                           .map(
                             ([target, anim]) =>
-                              `<tr><td><strong>${target}</strong></td><td><code>${anim.transitionProperty || "all"}</code></td><td><span style="color: var(--primary); font-weight: bold;">${anim.transitionDuration || "0s"}</span></td><td><code>${anim.transitionTimingFunction || "ease"}</code></td></tr>`
+                              `<tr><td><strong>${target}</strong></td><td><code>${anim.transitionProperty || "all"}</code></td><td><span style="color: var(--primary); font-weight: bold;">${anim.transitionDuration || "0s"}</span></td><td><code>${anim.transitionTimingFunction || "ease"}</code></td></tr>`,
                           )
                           .join("")
                       : `<tr><td colspan="4">No explicit transitions declared</td></tr>`
@@ -270,7 +277,7 @@ export function generateHtmlReport(results, config, outputDir) {
                     ${r.seo.issues
                       .map(
                         (issue) =>
-                          `<tr><td><strong>${issue.field}</strong></td><td>${issue.baseline || "—"}</td><td>${issue.current || "—"}</td></tr>`
+                          `<tr><td><strong>${issue.field}</strong></td><td>${issue.baseline || "—"}</td><td>${issue.current || "—"}</td></tr>`,
                       )
                       .join("")}
                   </tbody>

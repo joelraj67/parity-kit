@@ -1,10 +1,9 @@
-﻿import { chromium } from "playwright";
-import {
+﻿import {
   triggerScrollAndLazyLoad,
   waitForFontsLoaded,
   waitForImagesLoaded,
   stabilizeUiStyles,
-  applySmartMasks
+  applySmartMasks,
 } from "./preprocessors.js";
 import { extractSeoMetadata } from "./dom-seo-scanner.js";
 import { extractComputedStyles } from "./css-inspector.js";
@@ -23,7 +22,7 @@ export async function capturePage(browser, url, viewport, options = {}) {
     deviceScaleFactor: 1,
     colorScheme: options.colorScheme || "light",
     userAgent:
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 WebParityKit/1.0"
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 WebParityKit/1.0",
   });
 
   const page = await context.newPage();
@@ -46,7 +45,7 @@ export async function capturePage(browser, url, viewport, options = {}) {
     // Navigate with network idle strategy
     await page.goto(url, {
       waitUntil: "networkidle",
-      timeout: options.timeout || 30000
+      timeout: options.timeout || 30000,
     });
 
     // 1. Wait for web fonts
@@ -91,7 +90,7 @@ export async function capturePage(browser, url, viewport, options = {}) {
     // Capture full-page screenshot
     const screenshot = await page.screenshot({
       fullPage: true,
-      type: "png"
+      type: "png",
     });
 
     return {
@@ -105,7 +104,7 @@ export async function capturePage(browser, url, viewport, options = {}) {
       interactiveStates,
       consoleErrors,
       networkErrors,
-      error: null
+      error: null,
     };
   } catch (error) {
     return {
@@ -119,7 +118,7 @@ export async function capturePage(browser, url, viewport, options = {}) {
       interactiveStates: [],
       consoleErrors,
       networkErrors,
-      error: error.message
+      error: error.message,
     };
   } finally {
     await context.close();
