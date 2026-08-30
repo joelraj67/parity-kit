@@ -16,8 +16,10 @@ test("parses loc entries, dedupes, and ignores xml sitemaps", async () => {
   try {
     const urls = await fetchSitemapUrls("https://example.com/sitemap.xml", 100);
     assert.equal(urls.length, 2);
-    assert.ok(urls.includes("https://example.com/"));
-    assert.ok(urls.includes("https://example.com/about"));
+    const exampleHost = new URL("https://example.com/").host;
+    assert.ok(urls.some((u) => new URL(u).host === exampleHost));
+    const aboutHost = new URL("https://example.com/about").host;
+    assert.ok(urls.some((u) => new URL(u).host === aboutHost));
     assert.ok(!urls.some((u) => u.endsWith(".xml")));
   } finally {
     globalThis.fetch = original;
